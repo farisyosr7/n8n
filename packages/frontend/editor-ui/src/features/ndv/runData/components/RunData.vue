@@ -45,7 +45,6 @@ import RunDataPinButton from './RunDataPinButton.vue';
 import { useExternalHooks } from '@/app/composables/useExternalHooks';
 import { useI18n } from '@n8n/i18n';
 import { useNodeHelpers } from '@/app/composables/useNodeHelpers';
-import { useNodeType } from '@/app/composables/useNodeType';
 import type { PinDataSource, UnpinDataSource } from '@/app/composables/usePinnedData';
 import { usePinnedData } from '@/app/composables/usePinnedData';
 import { useTelemetry } from '@/app/composables/useTelemetry';
@@ -245,9 +244,6 @@ const pinnedData = usePinnedData(node, {
 	runIndex: props.runIndex,
 	displayMode: props.displayMode,
 });
-const { isSubNodeType } = useNodeType({
-	node,
-});
 
 const isArchivedWorkflow = computed(() => workflowsStore.workflow.isArchived);
 const isReadOnlyRoute = computed(() => route.meta.readOnlyCanvas === true);
@@ -383,9 +379,6 @@ const parentNodeError = computed(() => {
 
 const workflowRunErrorAsNodeError = computed(() => {
 	if (!node.value) return null;
-	if (isSubNodeType.value && isPaneTypeInput.value) {
-		return parentNodeError.value;
-	}
 	return workflowRunData.value?.[node.value.name]?.[props.runIndex]?.error as NodeError;
 });
 
